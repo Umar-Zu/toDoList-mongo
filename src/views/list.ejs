@@ -1,0 +1,69 @@
+<%- include('partials/header', { title: currentTitle + ' Todo List' }) %>
+
+<main>
+  <!-- heading -->
+  <div class="box" id="heading">
+    <h1><%= currentTitle %></h1>
+  </div>
+
+  <div class="box">
+    <% if (newListItems.length === 0) { %>
+    <p class="empty-list">No items in this list yet!</p>
+    <% } %> <% newListItems.forEach(function(item) { %>
+    <div class="item">
+      <!-- Delete Form -->
+      <form action="/delete" method="post" class="delete-form">
+        <input
+          type="checkbox"
+          name="checkbox"
+          value="<%= item._id %>"
+          class="delete-checkbox"
+        />
+        <input type="hidden" name="listName" value="<%= currentTitle %>" />
+      </form>
+
+      <!-- Item Display/Edit -->
+      <div class="item-content" data-id="<%= item._id %>">
+        <span class="item-text"><%= item.name %></span>
+        <button class="edit-btn">Edit</button>
+      </div>
+
+      <!-- Edit Form (Hidden by default) -->
+      <form action="/edit" method="post" class="edit-form">
+        <input
+          type="text"
+          name="updatedItemTitle"
+          value="<%= item.name %>"
+          required
+        />
+        <input type="hidden" name="updatedItemId" value="<%= item._id %>" />
+        <input
+          type="hidden"
+          name="customeListName"
+          value="<%= currentTitle %>"
+        />
+        <div class="button-group">
+          <button type="submit" class="save-btn">Save</button>
+          <button type="button" class="cancel-btn">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <% }); %>
+
+    <!-- Add New Item Form -->
+    <form class="item" action="/" method="post">
+      <input
+        type="text"
+        name="newItem"
+        placeholder="New Item"
+        required
+        autocomplete="off"
+      />
+      <button type="submit" name="list" value="<%= currentTitle %>">+</button>
+    </form>
+  </div>
+
+  <script src="/js/listOperations.js"></script>
+
+  <%- include('partials/footer') %>
+</main>
